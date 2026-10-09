@@ -1,363 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VEDHA Money Tracker</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      padding: 20px;
-      background: #10131c;
-      color: #ffffff;
-      font-family: Arial, sans-serif;
-    }
-
-    .container {
-      max-width: 650px;
-      margin: auto;
-    }
-
-    header {
-      padding: 20px 0;
-    }
-
-    header h1 {
-      color: #62e6a5;
-      margin-bottom: 8px;
-    }
-
-    header p {
-      color: #aab2c5;
-    }
-
-    .card {
-      background: #1b2130;
-      padding: 20px;
-      border-radius: 16px;
-      margin-bottom: 18px;
-      border: 1px solid #30394b;
-    }
-
-    .balance {
-      font-size: 32px;
-      font-weight: bold;
-      margin: 12px 0;
-      overflow-wrap: anywhere;
-    }
-
-    .summary {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .income {
-      color: #62e6a5;
-    }
-
-    .expense {
-      color: #ff7d91;
-    }
-
-    label {
-      display: block;
-      margin: 14px 0 7px;
-      color: #cbd3e4;
-    }
-
-    input, select, button {
-      width: 100%;
-      padding: 13px;
-      border-radius: 9px;
-      border: 1px solid #39445a;
-      font-size: 16px;
-    }
-
-    input, select {
-      background: #101622;
-      color: white;
-    }
-
-    button {
-      margin-top: 16px;
-      background: #62e6a5;
-      color: #10131c;
-      font-weight: bold;
-      border: none;
-      cursor: pointer;
-    }
-
-    .transaction {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 0;
-      border-bottom: 1px solid #30394b;
-    }
-
-    .transaction small {
-      display: block;
-      color: #aab2c5;
-      margin-top: 5px;
-    }
-
-    .delete {
-      width: auto;
-      margin: 0;
-      padding: 8px 12px;
-      background: #3b2631;
-      color: #ff9aab;
-    }
-
-    .empty {
-      color: #aab2c5;
-      text-align: center;
-      padding: 20px 0;
-    }
-
-    .note {
-      color: #aab2c5;
-      font-size: 12px;
-      line-height: 1.5;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#10131c">
+<title>VEDHA — Money Tracker</title>
+<style>
+:root{--bg:#0d111b;--panel:#171e2c;--panel2:#1d2637;--line:#303b50;--text:#f4f7ff;--muted:#9daac0;--green:#62e6a5;--red:#ff7d91;--blue:#8bb7ff;--radius:18px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top right,#17283a 0,transparent 42%),var(--bg);color:var(--text);font:15px/1.5 Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}.app{max-width:1150px;margin:auto;padding:24px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:26px}.brand{display:flex;align-items:center;gap:12px}.logo{display:grid;place-items:center;width:46px;height:46px;background:var(--green);color:#102017;border-radius:14px;font-size:24px;font-weight:900}.brand h1{margin:0;font-size:24px;letter-spacing:.4px}.brand p{margin:2px 0 0;color:var(--muted);font-size:13px}.top-actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);border-radius:11px;padding:10px 14px;background:var(--panel2);color:var(--text);font-weight:700}.btn.primary{background:var(--green);border-color:var(--green);color:#102017}.btn:hover{filter:brightness(1.08)}
+.notice{padding:13px 16px;border:1px solid #42516a;background:#182335;border-radius:13px;color:#cbd6e8;margin-bottom:20px;font-size:13px}.notice strong{color:var(--green)}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{background:linear-gradient(145deg,rgba(29,38,55,.98),rgba(22,29,43,.98));border:1px solid var(--line);border-radius:var(--radius);padding:20px;min-width:0;box-shadow:0 10px 30px #00000012}.metric-label{color:var(--muted);font-size:13px}.metric{font-size:clamp(22px,3vw,32px);font-weight:800;letter-spacing:-.6px;margin:8px 0 3px;overflow-wrap:anywhere}.metric-foot{font-size:12px;color:var(--muted)}.green{color:var(--green)}.red{color:var(--red)}.blue{color:var(--blue)}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:28px 0 14px}.section-head h2,.card h2{font-size:17px;margin:0}.section-head p{margin:3px 0 0;color:var(--muted);font-size:13px}
+.content-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr);gap:16px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}.field.full{grid-column:1/-1}.field label{display:block;color:#cbd4e5;font-size:13px;margin:13px 0 6px}.field input,.field select,.toolbar input,.toolbar select{width:100%;background:#101622;color:var(--text);border:1px solid #39465d;border-radius:10px;padding:12px;min-width:0}.field input:focus,.field select:focus,.toolbar input:focus,.toolbar select:focus{outline:2px solid #62e6a555;border-color:var(--green)}.form-actions{display:flex;gap:10px}.form-actions>*{flex:1}
+.chart-wrap{display:flex;align-items:center;gap:22px;min-height:190px}.donut{width:148px;height:148px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;background:conic-gradient(var(--green) 0deg,#2b3548 0deg)}.donut-hole{width:105px;height:105px;border-radius:50%;background:var(--panel);display:grid;place-items:center;text-align:center;padding:8px}.donut-hole strong{font-size:16px}.donut-hole small{font-size:11px;color:var(--muted)}.legend{display:grid;gap:12px;min-width:0}.legend-row{display:flex;justify-content:space-between;gap:12px;font-size:13px}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px}.bar-list{display:grid;gap:14px;margin-top:18px}.bar-label{display:flex;justify-content:space-between;gap:10px;font-size:13px;margin-bottom:6px}.bar-track{height:8px;background:#0e1420;border-radius:20px;overflow:hidden}.bar-fill{height:100%;background:var(--green);border-radius:20px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}.toolbar input{flex:1;min-width:160px}.toolbar select{width:auto;min-width:130px}.transactions{display:grid;gap:0}.transaction{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid #30394b}.transaction:last-child{border-bottom:0}.tx-icon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:#243044;font-size:18px;flex-shrink:0}.tx-main{flex:1;min-width:0}.tx-title{font-weight:700;overflow-wrap:anywhere}.tx-meta{font-size:12px;color:var(--muted);overflow-wrap:anywhere}.tx-right{text-align:right;white-space:nowrap}.tx-amount{font-weight:800}.delete{margin-top:5px;padding:4px 8px;background:#3b2631;color:#ff9aab;border:0;border-radius:7px;font-size:11px}
+.accounts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.account{padding:14px;border:1px solid var(--line);border-radius:13px;background:#131a27}.account-top{display:flex;align-items:center;gap:10px}.account-icon{display:grid;place-items:center;width:38px;height:38px;background:#27354b;border-radius:11px}.account h3{margin:0;font-size:14px}.account p{margin:2px 0;color:var(--muted);font-size:12px}.account .status{margin-top:12px;color:var(--muted);font-size:12px}.pill{display:inline-block;border:1px solid #4b5a70;border-radius:99px;padding:3px 8px;font-size:11px;color:#cbd6e8}
+.empty{padding:24px 10px;text-align:center;color:var(--muted)}.small-note{font-size:12px;color:var(--muted);line-height:1.55}.footer{padding:25px 0 10px;color:#718099;font-size:12px;text-align:center}
+dialog{width:min(520px,calc(100% - 24px));background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:18px;padding:22px}dialog::backdrop{background:#0009}.dialog-head{display:flex;justify-content:space-between;align-items:center}.dialog-head h2{margin:0}.close{background:transparent;border:0;color:var(--muted);font-size:24px}.dialog-actions{display:flex;gap:10px;margin-top:18px}.dialog-actions>*{flex:1}
+@media(max-width:780px){.app{padding:16px}.grid{grid-template-columns:1fr 1fr}.grid .card:first-child{grid-column:1/-1}.content-grid{grid-template-columns:1fr}.chart-wrap{justify-content:center}.topbar{align-items:flex-start}.brand h1{font-size:21px}}
+@media(max-width:480px){.grid{gap:10px}.card{padding:16px}.grid .card:first-child{grid-column:1/-1}.metric{font-size:24px}.accounts{grid-template-columns:1fr}.chart-wrap{flex-direction:column}.top-actions .btn{padding:9px 10px;font-size:12px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.section-head{align-items:flex-start}.toolbar>*{width:100%!important}.tx-right{white-space:normal}.transaction{align-items:flex-start}}
+</style>
 </head>
-
 <body>
-  <main class="container">
-    <header>
-      <h1>💰 VEDHA</h1>
-      <p>Your personal money tracker</p>
-    </header>
+<main class="app">
+  <header class="topbar">
+    <div class="brand"><div class="logo">V</div><div><h1>VEDHA</h1><p>Your money, made clearer.</p></div></div>
+    <div class="top-actions">
+      <button class="btn" id="exportBtn">Export CSV ↓</button>
+      <button class="btn primary" id="connectBtn">＋ Connect account</button>
+    </div>
+  </header>
 
-    <section class="card">
-      <p>Total Balance</p>
-      <div class="balance" id="balance">₹0.00</div>
+  <div class="notice"><strong>Private demo mode:</strong> transactions are stored in this browser only. Bank/UPI auto-sync is not connected yet. Use the account button to see the integration setup, or import a bank statement CSV below.</div>
 
-      <div class="summary">
-        <div>
-          <p class="income">↗ Total Income</p>
-          <strong id="income">₹0.00</strong>
-        </div>
+  <section class="grid" aria-label="Financial summary">
+    <article class="card"><div class="metric-label">Available balance</div><div class="metric" id="balance">₹0.00</div><div class="metric-foot">Income minus expenses · all recorded transactions</div></article>
+    <article class="card"><div class="metric-label">Total income</div><div class="metric green" id="income">₹0.00</div><div class="metric-foot">Money received</div></article>
+    <article class="card"><div class="metric-label">Total expenses</div><div class="metric red" id="expense">₹0.00</div><div class="metric-foot">Money spent</div></article>
+  </section>
 
-        <div>
-          <p class="expense">↘ Total Expenses</p>
-          <strong id="expense">₹0.00</strong>
-        </div>
-      </div>
-    </section>
+  <div class="section-head"><div><h2>Spending overview</h2><p id="periodLabel">Your expense categories</p></div><select id="chartPeriod" class="btn" aria-label="Chart period"><option value="month">This month</option><option value="all">All time</option></select></div>
+  <section class="content-grid">
+    <article class="card"><h2>Income vs expenses</h2><div class="chart-wrap"><div class="donut" id="donut"><div class="donut-hole"><div><strong id="donutTotal">₹0</strong><br><small>expenses</small></div></div></div><div class="legend"><div class="legend-row"><span><i class="dot" style="background:var(--green)"></i>Income</span><strong id="legendIncome">₹0</strong></div><div class="legend-row"><span><i class="dot" style="background:var(--red)"></i>Expenses</span><strong id="legendExpense">₹0</strong></div><div class="legend-row"><span><i class="dot" style="background:#2b3548"></i>Balance</span><strong id="legendBalance">₹0</strong></div></div></div></article>
+    <article class="card"><h2>Top spending categories</h2><div class="bar-list" id="categoryBars"><div class="empty">Add expenses to see your spending breakdown.</div></div></article>
+  </section>
 
-    <section class="card">
-      <h2>Add Transaction</h2>
-
+  <div class="section-head"><div><h2>Transactions</h2><p>Add entries manually or import a CSV statement.</p></div></div>
+  <section class="content-grid">
+    <article class="card">
+      <h2 id="formTitle">Add transaction</h2>
       <form id="form">
-        <label for="type">Transaction Type</label>
-        <select id="type" required>
-          <option value="income">Income (+)</option>
-          <option value="expense">Expense (-)</option>
-        </select>
-
-        <label for="amount">Amount (₹)</label>
-        <input id="amount" type="number" min="0.01"
-          step="0.01" placeholder="Enter amount" required>
-
-        <label for="category">Category</label>
-        <select id="category" required>
-          <option>Salary</option>
-          <option>Business</option>
-          <option>Investment</option>
-          <option>Food</option>
-          <option>Travel</option>
-          <option>Shopping</option>
-          <option>Bills</option>
-          <option>Education</option>
-          <option>Other</option>
-        </select>
-
-        <label for="description">Description</label>
-        <input id="description" type="text"
-          maxlength="100" placeholder="What was it for?">
-
-        <label for="date">Date</label>
-        <input id="date" type="date" required>
-
-        <button type="submit">+ Add Transaction</button>
+        <div class="form-grid">
+          <div class="field"><label for="type">Type</label><select id="type" required><option value="expense">Expense</option><option value="income">Income</option></select></div>
+          <div class="field"><label for="amount">Amount (₹)</label><input id="amount" type="number" min="0.01" step="0.01" placeholder="0.00" required></div>
+          <div class="field"><label for="category">Category</label><select id="category" required><option>Food</option><option>Transport</option><option>Shopping</option><option>Bills</option><option>Salary</option><option>Business</option><option>Investment</option><option>Education</option><option>Health</option><option>Entertainment</option><option>Transfer</option><option>Other</option></select></div>
+          <div class="field"><label for="method">Payment method</label><select id="method"><option>UPI</option><option>Bank transfer</option><option>Debit card</option><option>Credit card</option><option>Cash</option><option>Other</option></select></div>
+          <div class="field full"><label for="description">Description</label><input id="description" maxlength="120" placeholder="e.g. lunch, rent, salary"></div>
+          <div class="field full"><label for="date">Date</label><input id="date" type="date" required></div>
+        </div>
+        <div class="form-actions"><button class="btn primary" type="submit" id="submitBtn">＋ Add transaction</button><button class="btn" type="reset" id="resetBtn">Clear</button></div>
       </form>
-    </section>
+    </article>
+    <article class="card">
+      <h2>Import bank statement</h2>
+      <p class="small-note">Choose a CSV file downloaded from your bank. The file is processed in this page and isn't uploaded to a server. Bank CSV formats vary; map the columns in the file to Date, Description, Amount, and Type before importing if needed.</p>
+      <div class="field"><label for="csvFile">Statement CSV</label><input id="csvFile" type="file" accept=".csv,text/csv"></div>
+      <div class="field"><label for="csvFormat">CSV layout</label><select id="csvFormat"><option value="standard">Date, Description, Amount, Type (header row)</option><option value="bank">Date, Description, Debit, Credit (header row)</option></select></div>
+      <button class="btn" id="importBtn" type="button">Import CSV</button>
+      <p class="small-note" id="importStatus" role="status">No file selected.</p>
+      <hr style="border:0;border-top:1px solid var(--line);margin:20px 0">
+      <h2>Data backup</h2><p class="small-note">Export a CSV regularly for backup. Browser storage can be lost if you clear site data or change devices.</p>
+    </article>
+  </section>
 
-    <section class="card">
-      <h2>Recent Transactions</h2>
-      <div id="transactions"></div>
-      <p class="note">
-        Your records are stored in this browser on this device.
-        Clearing browser data may delete them.
-      </p>
-    </section>
-  </main>
+  <div class="section-head"><div><h2>Recent activity</h2><p>Search and filter your transaction history.</p></div></div>
+  <section class="card">
+    <div class="toolbar"><input id="search" type="search" placeholder="Search description or category…"><select id="filterType"><option value="all">All types</option><option value="income">Income</option><option value="expense">Expense</option></select><select id="filterMethod"><option value="all">All methods</option><option>UPI</option><option>Bank transfer</option><option>Debit card</option><option>Credit card</option><option>Cash</option><option>Other</option></select></div>
+    <div class="transactions" id="transactions"><div class="empty">No transactions yet. Add your first one!</div></div>
+  </section>
 
-  <script>
-    const money = amount =>
-      new Intl.NumberFormat("en-IN", {
-        style: "currency",
-        currency: "INR"
-      }).format(amount);
+  <div class="section-head"><div><h2>Connected accounts</h2><p>Account connection setup</p></div><span class="pill">Not connected</span></div>
+  <section class="card">
+    <div class="accounts">
+      <div class="account"><div class="account-top"><div class="account-icon">🏦</div><div><h3>Bank account</h3><p>Account Aggregator integration</p></div></div><div class="status">Not connected · provider onboarding required</div></div>
+      <div class="account"><div class="account-top"><div class="account-icon">📲</div><div><h3>UPI transactions</h3><p>Imported statement / supported feed</p></div></div><div class="status">Not connected · UPI app history isn't exposed by this HTML page</div></div>
+    </div>
+    <p class="small-note" style="margin-top:16px">Automatic bank-data access needs a supported provider, user consent, a secure backend, and provider approval. UPI payment initiation is different from reading transaction history. Never collect UPI PINs, bank passwords, or OTPs in this app.</p>
+  </section>
+  <footer class="footer">VEDHA Money Tracker · Prototype · Keep your financial data secure.</footer>
+</main>
 
-    const today = new Date();
-    const localDate = [
-      today.getFullYear(),
-      String(today.getMonth() + 1).padStart(2, "0"),
-      String(today.getDate()).padStart(2, "0")
-    ].join("-");
+<dialog id="connectDialog">
+  <div class="dialog-head"><h2>Connect a financial account</h2><button class="close" id="closeDialog" aria-label="Close">×</button></div>
+  <p>Bank auto-sync can't be enabled by a front-end HTML file alone. To enable it safely, VEDHA needs:</p>
+  <ol class="small-note"><li>A backend and authenticated user accounts.</li><li>An approved bank-data provider / Account Aggregator integration.</li><li>Explicit user consent and secure token handling on the server.</li><li>A scheduled sync job, transaction deduplication, and sync status.</li></ol>
+  <p class="small-note">For now, you can import a bank statement CSV in the Import section or add transactions manually. Don't enter your bank password, UPI PIN, or OTP here.</p>
+  <div class="dialog-actions"><button class="btn" id="dialogOk">Got it</button><button class="btn primary" id="dialogImport">Import statement</button></div>
+</dialog>
 
-    document.getElementById("date").value = localDate;
-
-    let transactions = [];
-
-    try {
-      const saved = localStorage.getItem("vedhaTransactions");
-      const parsed = saved ? JSON.parse(saved) : [];
-      if (Array.isArray(parsed)) {
-        transactions = parsed.filter(t =>
-          t &&
-          typeof t.id === "string" &&
-          (t.type === "income" || t.type === "expense") &&
-          Number.isFinite(t.amount) &&
-          t.amount > 0 &&
-          typeof t.category === "string" &&
-          typeof t.date === "string"
-        );
-      }
-    } catch {
-      transactions = [];
-    }
-
-    function save() {
-      try {
-        localStorage.setItem(
-          "vedhaTransactions",
-          JSON.stringify(transactions)
-        );
-        return true;
-      } catch {
-        alert("Could not save data in this browser.");
-        return false;
-      }
-    }
-
-    function render() {
-      const income = transactions
-        .filter(t => t.type === "income")
-        .reduce((sum, t) => sum + t.amount, 0);
-
-      const expense = transactions
-        .filter(t => t.type === "expense")
-        .reduce((sum, t) => sum + t.amount, 0);
-
-      document.getElementById("balance").textContent =
-        money(income - expense);
-
-      document.getElementById("income").textContent = money(income);
-      document.getElementById("expense").textContent = money(expense);
-
-      const list = document.getElementById("transactions");
-      list.replaceChildren();
-
-      if (transactions.length === 0) {
-        const empty = document.createElement("p");
-        empty.className = "empty";
-        empty.textContent = "No transactions yet. Add your first one!";
-        list.appendChild(empty);
-        return;
-      }
-
-      [...transactions]
-        .sort((a, b) => b.date.localeCompare(a.date) ||
-          b.id.localeCompare(a.id))
-        .forEach(t => {
-          const row = document.createElement("div");
-          row.className = "transaction";
-
-          const details = document.createElement("div");
-          const title = document.createElement("strong");
-          title.textContent = t.category;
-
-          const description = document.createElement("small");
-          description.textContent =
-            (t.description || t.category) + " • " + t.date;
-
-          details.append(title, description);
-
-          const right = document.createElement("div");
-          right.style.textAlign = "right";
-
-          const amount = document.createElement("strong");
-          amount.className = t.type;
-          amount.textContent =
-            (t.type === "income" ? "+" : "-") + money(t.amount);
-
-          const remove = document.createElement("button");
-          remove.className = "delete";
-          remove.textContent = "Delete";
-          remove.setAttribute("aria-label", "Delete transaction");
-
-          remove.addEventListener("click", () => {
-            if (confirm("Delete this transaction?")) {
-              const previous = transactions;
-              transactions = transactions.filter(x => x.id !== t.id);
-
-              if (save()) {
-                render();
-              } else {
-                transactions = previous;
-              }
-            }
-          });
-
-          right.append(amount, remove);
-          row.append(details, right);
-          list.appendChild(row);
-        });
-    }
-
-    document.getElementById("form").addEventListener("submit", event => {
-      event.preventDefault();
-
-      const amount = Number(document.getElementById("amount").value);
-      const date = document.getElementById("date").value;
-
-      if (!Number.isFinite(amount) || amount <= 0 || !date) {
-        alert("Please enter a valid amount and date.");
-        return;
-      }
-
-      const transaction = {
-        id: crypto.randomUUID(),
-        type: document.getElementById("type").value,
-        amount,
-        category: document.getElementById("category").value,
-        description: document.getElementById("description").value.trim(),
-        date
-      };
-
-      transactions.push(transaction);
-
-      if (save()) {
-        event.target.reset();
-        document.getElementById("date").value = localDate;
-        render();
-      } else {
-        transactions.pop();
-      }
-    });
-
-    render();
-  </script>
+<script>
+const KEY = "vedhaTransactionsV2";
+const money = n => new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:2}).format(n);
+const today = new Date();
+const localDate = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
+document.getElementById("date").value = localDate;
+let transactions = [];
+let editingId = null;
+try {
+  const old = localStorage.getItem(KEY) || localStorage.getItem("vedhaTransactions") || "[]";
+  const parsed = JSON.parse(old);
+  if(Array.isArray(parsed)) transactions = parsed.filter(t => t && typeof t.id==="string" && ["income","expense"].includes(t.type) && Number.isFinite(Number(t.amount)) && Number(t.amount)>0 && typeof t.date==="string").map(t=>({...t,amount:Number(t.amount),method:t.method||"Other"}));
+} catch { transactions=[]; }
+function save(){try{localStorage.setItem(KEY,JSON.stringify(transactions));return true}catch{alert("Unable to save. Your browser storage may be full or disabled.");return false}}
+function monthTransactions(){const m=localDate.slice(0,7);return transactions.filter(t=>t.date.slice(0,7)===m)}
+function totals(items){return items.reduce((o,t)=>{o[t.type]+=t.amount;return o},{income:0,expense:0})}
+function safeText(s){return String(s??"")}
+function render(){
+ const t=totals(transactions), balance=t.income-t.expense;
+ document.getElementById("balance").textContent=money(balance);
+ document.getElementById("income").textContent=money(t.income);
+ document.getElementById("expense").textContent=money(t.expense);
+ const chartItems=document.getElementById("chartPeriod").value==="month"?monthTransactions():transactions;
+ const ct=totals(chartItems), total=ct.income+ct.expense, expenseDeg=total?ct.expense/total*360:0;
+ document.getElementById("donut").style.background=`conic-gradient(var(--green) 0deg ${total?ct.income/total*360:0}deg, var(--red) ${total?ct.income/total*360:0}deg 360deg)`;
+ document.getElementById("donutTotal").textContent=money(ct.expense).replace(/\.\d\d$/,"");
+ document.getElementById("legendIncome").textContent=money(ct.income);
+ document.getElementById("legendExpense").textContent=money(ct.expense);
+ document.getElementById("legendBalance").textContent=money(ct.income-ct.expense);
+ document.getElementById("periodLabel").textContent=document.getElementById("chartPeriod").value==="month"?"This month's overview":"All-time overview";
+ const cats={};chartItems.filter(x=>x.type==="expense").forEach(x=>cats[x.category]=(cats[x.category]||0)+x.amount);
+ const sorted=Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,5), max=sorted.length?sorted[0][1]:1, bars=document.getElementById("categoryBars");bars.replaceChildren();
+ if(!sorted.length){const e=document.createElement("div");e.className="empty";e.textContent="Add expenses to see your spending breakdown.";bars.append(e)}
+ sorted.forEach(([name,val])=>{const wrap=document.createElement("div"),label=document.createElement("div"),track=document.createElement("div"),fill=document.createElement("div"),left=document.createElement("span"),right=document.createElement("strong");label.className="bar-label";left.textContent=name;right.textContent=money(val);label.append(left,right);track.className="bar-track";fill.className="bar-fill";fill.style.width=`${val/max*100}%`;track.append(fill);wrap.append(label,track);bars.append(wrap)});
+ renderTransactions();
+}
+function renderTransactions(){
+ const q=document.getElementById("search").value.trim().toLowerCase(), ft=document.getElementById("filterType").value, fm=document.getElementById("filterMethod").value;
+ const filtered=[...transactions].filter(t=>(ft==="all"||t.type===ft)&&(fm==="all"||(t.method||"Other")===fm)&&`${t.description||""} ${t.category} ${t.date} ${t.method||""}`.toLowerCase().includes(q)).sort((a,b)=>b.date.localeCompare(a.date)||b.id.localeCompare(a.id));
+ const list=document.getElementById("transactions");list.replaceChildren();
+ if(!filtered.length){const e=document.createElement("div");e.className="empty";e.textContent=transactions.length?"No transactions match these filters.":"No transactions yet. Add your first one!";list.append(e);return}
+ filtered.forEach(t=>{
+  const row=document.createElement("div");row.className="transaction";
+  const icon=document.createElement("div");icon.className="tx-icon";icon.textContent=t.type==="income"?"↙":"↗";
+  const main=document.createElement("div");main.className="tx-main";
+  const title=document.createElement("div");title.className="tx-title";title.textContent=t.category;
+  const meta=document.createElement("div");meta.className="tx-meta";meta.textContent=`${t.description||t.category} · ${t.date} · ${t.method||"Other"}`;main.append(title,meta);
+  const right=document.createElement("div");right.className="tx-right";
+  const amt=document.createElement("div");amt.className=`tx-amount ${t.type==="income"?"green":"red"}`;amt.textContent=`${t.type==="income"?"+":"−"}${money(t.amount)}`;
+  const del=document.createElement("button");del.className="delete";del.textContent="Delete";del.setAttribute("aria-label","Delete transaction");del.addEventListener("click",()=>{if(confirm("Delete this transaction?")){const old=transactions;transactions=transactions.filter(x=>x.id!==t.id);if(save())render();else transactions=old}});
+  right.append(amt,del);row.append(icon,main,right);list.append(row);
+ });
+}
+document.getElementById("form").addEventListener("submit",e=>{
+ e.preventDefault();const amount=Number(document.getElementById("amount").value),date=document.getElementById("date").value;
+ if(!Number.isFinite(amount)||amount<=0||!date){alert("Enter a valid amount and date.");return}
+ const entry={id:editingId||crypto.randomUUID(),type:document.getElementById("type").value,amount,category:document.getElementById("category").value,method:document.getElementById("method").value,description:document.getElementById("description").value.trim(),date};
+ const old=transactions;
+ if(editingId)transactions=transactions.map(t=>t.id===editingId?entry:t);else transactions.push(entry);
+ if(save()){e.target.reset();editingId=null;document.getElementById("date").value=localDate;document.getElementById("formTitle").textContent="Add transaction";document.getElementById("submitBtn").textContent="＋ Add transaction";render()}else transactions=old;
+});
+document.getElementById("resetBtn").addEventListener("click",()=>{editingId=null;document.getElementById("formTitle").textContent="Add transaction";document.getElementById("submitBtn").textContent="＋ Add transaction";setTimeout(()=>document.getElementById("date").value=localDate,0)});
+["search","filterType","filterMethod"].forEach(id=>document.getElementById(id).addEventListener(id==="search"?"input":"change",renderTransactions));
+document.getElementById("chartPeriod").addEventListener("change",render);
+document.getElementById("exportBtn").addEventListener("click",()=>{
+ const rows=[["Date","Type","Amount","Category","Payment Method","Description"],...transactions.map(t=>[t.date,t.type,t.amount,t.category,t.method||"Other",t.description||""])];
+ const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\r\n");
+ const url=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8;"})),a=document.createElement("a");a.href=url;a.download="vedha-transactions.csv";a.click();URL.revokeObjectURL(url);
+});
+const dialog=document.getElementById("connectDialog");
+document.getElementById("connectBtn").addEventListener("click",()=>dialog.showModal());
+["closeDialog","dialogOk"].forEach(id=>document.getElementById(id).addEventListener("click",()=>dialog.close()));
+document.getElementById("dialogImport").addEventListener("click",()=>{dialog.close();document.getElementById("csvFile").focus();document.getElementById("csvFile").scrollIntoView({behavior:"smooth",block:"center"})});
+document.getElementById("importBtn").addEventListener("click",async()=>{
+ const file=document.getElementById("csvFile").files[0],status=document.getElementById("importStatus");
+ if(!file){status.textContent="Choose a CSV file first.";return}
+ try{
+  const text=await file.text(),lines=text.replace(/^\uFEFF/,"").split(/\r?\n/).filter(x=>x.trim());
+  if(lines.length<2)throw Error("CSV needs a header and at least one transaction.");
+  const parseLine=line=>{const out=[];let s="",quoted=false;for(let i=0;i<line.length;i++){const c=line[i];if(c==='"'&&line[i+1]==='"'&&quoted){s+='"';i++}else if(c==='"')quoted=!quoted;else if(c===","&&!quoted){out.push(s.trim());s=""}else s+=c}out.push(s.trim());return out.map(x=>x.replace(/^"|"$/g,"").trim())};
+  const header=parseLine(lines[0]).map(x=>x.toLowerCase()),rows=lines.slice(1).map(parseLine);
+  const find=names=>header.findIndex(h=>names.some(n=>h.includes(n)));
+  const di=find(["date","transaction date","value date"]),de=find(["description","narration","details","remarks","particulars"]),ai=find(["amount","transaction amount"]),ti=find(["type","dr/cr","transaction type"]),db=find(["debit","withdrawal"]),cr=find(["credit","deposit"]);
+  if(di<0||de<0||(document.getElementById("csvFormat").value==="standard"&&ai<0)||(document.getElementById("csvFormat").value==="bank"&&(db<0||cr<0)))throw Error("Couldn't identify required columns. Include headers for Date, Description and Amount/Type or Debit/Credit.");
+  const added=[];
+  rows.forEach((r,i)=>{
+   const rawDate=r[di]||"";let date=rawDate;
+   if(/^\d{1,2}[/-]\d{1,2}[/-]\d{4}$/.test(rawDate)){const p=rawDate.split(/[/-]/);date=`${p[2]}-${p[1].padStart(2,"0")}-${p[0].padStart(2,"0")}`}
+   if(!/^\d{4}-\d{2}-\d{2}$/.test(date))return;
+   const description=r[de]||"Imported transaction";let amount,type;
+   if(document.getElementById("csvFormat").value==="bank"){const debit=Number((r[db]||"0").replace(/[₹,\s]/g,""))||0,credit=Number((r[cr]||"0").replace(/[₹,\s]/g,""))||0;amount=credit||debit;type=credit>0?"income":"expense"}
+   else{amount=Math.abs(Number((r[ai]||"").replace(/[₹,\s]/g,"")));type=ti>=0&&/credit|income|cr|received/i.test(r[ti])?"income":ti>=0&&/debit|expense|dr|paid/i.test(r[ti])?"expense":Number(r[ai])<0?"expense":"expense"}
+   if(!Number.isFinite(amount)||amount<=0)return;
+   const duplicate=transactions.some(t=>t.date===date&&t.amount===amount&&t.description===description&&t.type===type);
+   if(!duplicate)added.push({id:crypto.randomUUID(),type,amount,category:guessCategory(description),method:/upi|gpay|phonepe|paytm/i.test(description)?"UPI":"Bank transfer",description,date});
+  });
+  transactions.push(...added);
+  if(save()){render();status.textContent=`Imported ${added.length} transaction(s). Existing duplicates were skipped.`}else status.textContent="Import could not be saved.";
+ }catch(err){status.textContent=err.message||"Unable to import this CSV."}
+});
+function guessCategory(s){if(/salary|payroll/i.test(s))return"Salary";if(/grocery|restaurant|food|cafe|swiggy|zomato/i.test(s))return"Food";if(/fuel|uber|ola|metro|bus|transport/i.test(s))return"Transport";if(/electric|water|internet|mobile|bill/i.test(s))return"Bills";if(/amazon|flipkart|shopping/i.test(s))return"Shopping";return"Other"}
+render();
+</script>
 </body>
-  </html>
+</html>
